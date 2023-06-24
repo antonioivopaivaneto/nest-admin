@@ -19,10 +19,12 @@ const bcrypt = require("bcrypt");
 const register_dto_1 = require("./models/register.dto");
 const jwt_1 = require("@nestjs/jwt");
 const auth_guard_1 = require("./auth.guard");
+const auth_service_1 = require("./auth.service");
 let AuthController = class AuthController {
-    constructor(userService, jwtService) {
+    constructor(userService, jwtService, authService) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.authService = authService;
     }
     async register(body) {
         if (body.password !== body.password_confirm) {
@@ -33,11 +35,12 @@ let AuthController = class AuthController {
             first_name: body.first_name,
             last_name: body.last_name,
             email: body.email,
-            password: hashed
+            password: hashed,
+            role: { id: 4 }
         });
     }
     async login(email, password, response) {
-        const user = await this.userService.findOne({ where: { email: email } });
+        const user = await this.userService.find(email);
         if (!user) {
             throw new common_1.NotFoundException('User ot found');
         }
@@ -51,7 +54,7 @@ let AuthController = class AuthController {
     async user(request) {
         const cookie = request.cookies['jwt'];
         const data = await this.jwtService.verifyAsync(cookie);
-        return this.userService.findOne({ where: { id: data['id'] } });
+        return this.userService.findOne({ id: data['id'] });
     }
     async logout(response) {
         response.clearCookie('jwt');
@@ -96,7 +99,8 @@ AuthController = __decorate([
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [user_service_1.UserService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        auth_service_1.AuthService])
 ], AuthController);
 exports.AuthController = AuthController;
 //# sourceMappingURL=auth.controller.js.map

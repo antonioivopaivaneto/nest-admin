@@ -22,15 +22,19 @@ let RoleController = class RoleController {
     async all() {
         return this.roleService.all();
     }
-    async create(name) {
-        return this.roleService.create({ name });
+    async create(name, ids) {
+        return this.roleService.create({
+            name,
+            permissions: ids.map(id => ({ id }))
+        });
     }
     async get(id) {
-        return this.roleService.findOne({ where: { id } });
+        return this.roleService.findOne({ where: { id }, relations: ['permissions'] });
     }
-    async update(id, name) {
+    async update(id, name, ids) {
         await this.roleService.update(id, { name });
-        return this.roleService.findOne({ where: { id } });
+        const role = await this.roleService.findOne({ where: { id } });
+        return this.roleService.create(Object.assign(Object.assign({}, role), { Permissions: ids.map(id => ({ id })) }));
     }
     async delete(id) {
         return this.roleService.delete(id);
@@ -45,8 +49,9 @@ __decorate([
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)('name')),
+    __param(1, (0, common_1.Body)(' ')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Array]),
     __metadata("design:returntype", Promise)
 ], RoleController.prototype, "create", null);
 __decorate([
@@ -60,8 +65,9 @@ __decorate([
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)('name')),
+    __param(2, (0, common_1.Body)('permissions')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, String]),
+    __metadata("design:paramtypes", [Number, String, Array]),
     __metadata("design:returntype", Promise)
 ], RoleController.prototype, "update", null);
 __decorate([
