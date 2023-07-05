@@ -29,11 +29,14 @@ let RoleController = class RoleController {
         });
     }
     async get(id) {
-        return this.roleService.findOne({ where: { id }, relations: ['permissions'] });
+        return this.roleService.findOne({ id }, ['permissions']);
     }
     async update(id, name, ids) {
-        await this.roleService.update(id, { name });
-        const role = await this.roleService.findOne({ where: { id } });
+        await this.roleService.update(id, {
+            name,
+            permissions: ids.map(id => ({ id }))
+        });
+        const role = await this.roleService.findOne({ id });
         return this.roleService.create(Object.assign(Object.assign({}, role), { Permissions: ids.map(id => ({ id })) }));
     }
     async delete(id) {
@@ -49,7 +52,7 @@ __decorate([
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)('name')),
-    __param(1, (0, common_1.Body)(' ')),
+    __param(1, (0, common_1.Body)('permissions')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Array]),
     __metadata("design:returntype", Promise)

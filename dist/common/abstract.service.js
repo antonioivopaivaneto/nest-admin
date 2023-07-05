@@ -38,8 +38,11 @@ let AbstractService = class AbstractService {
     async create(data) {
         return this.repository.save(data);
     }
-    async findOne(conditions, relations = []) {
-        return this.repository.findOne({ where: conditions, relations });
+    async findOne(condition, relations = []) {
+        return this.repository.findOne({
+            where: condition,
+            relations
+        });
     }
     async find(email) {
         return this.repository.findOne({ where: { email } });
