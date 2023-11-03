@@ -22,7 +22,7 @@ export class ProductController {
 
     @Get(':id')
     async get(@Param('id') id:number){
-        return this.productService.findOne(id)
+        return this.productService.findOne({id})
     }
 
     @Put(':id')
@@ -33,7 +33,7 @@ export class ProductController {
     ){
         await this.productService.update(id, body)
 
-        return this.productService.findOne(id)
+        return this.productService.findOne({id})
     }
 
     @Delete(':id')

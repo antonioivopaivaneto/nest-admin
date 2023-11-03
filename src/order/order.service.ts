@@ -4,12 +4,30 @@ import { AbstractService } from 'src/common/abstract.service';
 import { Repository } from 'typeorm';
 import { Order } from './order.entity';
 import { group } from 'console';
+import {PaginateResult} from "../common/paginated-result.interface";
 
 @Injectable()
 export class OrderService extends AbstractService {
     constructor(
         @InjectRepository(Order) private readonly orderRepository:Repository<Order> ){
         super(orderRepository);
+    }
+    async paginate(page = 1, relations = []):Promise<PaginateResult>{
+
+        const {data,meta} = await super.paginate(page, relations);
+
+        return {
+            data:data.map((order:Order) =>({
+                id:order.id,
+                name:order.name,
+                email:order.email,
+                total:order.total,
+                created_at:order.created_at,
+                order_item:order.order_items
+
+            })),
+            meta
+        }
     }
 
     async chart(){

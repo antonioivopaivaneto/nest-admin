@@ -6,4 +6,6 @@ export declare class Order {
     email: string;
     created_at: Date;
     order_items: OrderItem[];
+    get name(): string;
+    get total(): number;
 }

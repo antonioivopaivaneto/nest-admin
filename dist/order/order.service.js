@@ -23,6 +23,20 @@ let OrderService = class OrderService extends abstract_service_1.AbstractService
         super(orderRepository);
         this.orderRepository = orderRepository;
     }
+    async paginate(page = 1, relations = []) {
+        const { data, meta } = await super.paginate(page, relations);
+        return {
+            data: data.map((order) => ({
+                id: order.id,
+                name: order.name,
+                email: order.email,
+                total: order.total,
+                created_at: order.created_at,
+                order_item: order.order_items
+            })),
+            meta
+        };
+    }
     async chart() {
         return this.orderRepository.query(`SELECT DATE_FORMAT(o.created_at, '%Y-%m-%d') as Date, sum(i.price * i.quantity) as sum
             FROM orders o 

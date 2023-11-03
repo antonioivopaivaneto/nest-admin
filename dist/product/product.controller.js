@@ -29,11 +29,11 @@ let ProductController = class ProductController {
         return this.productService.create(body);
     }
     async get(id) {
-        return this.productService.findOne(id);
+        return this.productService.findOne({ id });
     }
     async update(id, body) {
         await this.productService.update(id, body);
-        return this.productService.findOne(id);
+        return this.productService.findOne({ id });
     }
     async delete(id) {
         return this.productService.delete(id);

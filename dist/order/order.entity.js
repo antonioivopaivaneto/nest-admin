@@ -12,7 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Order = void 0;
 const typeorm_1 = require("typeorm");
 const order_item_entity_1 = require("./order-item.entity");
+const class_transformer_1 = require("class-transformer");
 let Order = class Order {
+    get name() {
+        return `${this.first_name} ${this.last_name}`;
+    }
+    get total() {
+        return this.order_items.reduce((sum, i) => sum + i.quantity * i.price, 0);
+    }
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
@@ -20,6 +27,7 @@ __decorate([
 ], Order.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
+    (0, class_transformer_1.Exclude)(),
     __metadata("design:type", String)
 ], Order.prototype, "first_name", void 0);
 __decorate([
@@ -38,6 +46,16 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => order_item_entity_1.OrderItem, orderItem => orderItem.order),
     __metadata("design:type", Array)
 ], Order.prototype, "order_items", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [])
+], Order.prototype, "name", null);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", Number),
+    __metadata("design:paramtypes", [])
+], Order.prototype, "total", null);
 Order = __decorate([
     (0, typeorm_1.Entity)('orders')
 ], Order);
