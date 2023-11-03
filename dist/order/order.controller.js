@@ -26,7 +26,7 @@ let OrderController = class OrderController {
     }
     async export(res) {
         const parse = new json2csv_1.Parser({
-            fields: ['ID', 'Name', 'Email', 'product', 'price', 'quantity']
+            fields: ['ID', 'Name', 'Email', 'product Title', 'Price', 'Quantity']
         });
         const orders = await this.orderService.all(['order_items']);
         const json = [];
@@ -49,11 +49,11 @@ let OrderController = class OrderController {
                     quantity: i.quantity
                 });
             });
-            const csv = parse.parse(json);
-            res.header('Content-Type', 'text/csv');
-            res.attachment('orders.csv');
-            return res.send(csv);
         });
+        const csv = parse.parse(json);
+        res.header('Content-Type', 'text/csv');
+        res.attachment('orders.csv');
+        return res.send(csv);
     }
     async chart() {
         return this.orderService.chart();

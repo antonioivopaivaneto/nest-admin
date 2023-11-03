@@ -55,7 +55,7 @@ let UserController = class UserController {
     async updateInfo(request, body) {
         const id = await this.authService.userId(request);
         await this.UserService.update(id, body);
-        return this.UserService.findOne({ where: { id } });
+        return this.UserService.findOne({ id });
     }
     async updatePassword(request, password, password_confirm) {
         if (password !== password_confirm) {
@@ -66,7 +66,7 @@ let UserController = class UserController {
         await this.UserService.update(id, {
             password: hashed
         });
-        return this.UserService.findOne({ where: { id } });
+        return this.UserService.findOne({ id });
     }
     async update(id, body) {
         const { role_id } = body, data = __rest(body, ["role_id"]);

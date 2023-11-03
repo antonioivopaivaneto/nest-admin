@@ -17,7 +17,7 @@ let AbstractService = class AbstractService {
         this.repository = repository;
     }
     async all(relations = []) {
-        return await this.repository.find({ where: relations });
+        return this.repository.find({ relations });
     }
     async paginate(page = 1, relations = []) {
         const take = 5;

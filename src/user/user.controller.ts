@@ -48,11 +48,12 @@ export class UserController {
     @Req() request: Request,
     @Body() body: UserUpdateDto
   ){
-    const id = await this.authService.userId(request); 
+    const id = await this.authService.userId(request);
+    
 
     await this.UserService.update(id, body)
 
-    return this.UserService.findOne({where:{id}});
+    return this.UserService.findOne({id});
   } 
   
 
@@ -77,7 +78,7 @@ export class UserController {
        
     })
 
-    return this.UserService.findOne({where:{id}});
+    return this.UserService.findOne({id});
 
   }
 

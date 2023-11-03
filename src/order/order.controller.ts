@@ -19,10 +19,14 @@ export class OrderController {
 
     @Post('export')
     async export(@Res() res: Response){
+
+        
         const parse =new  Parser({
-            fields: ['ID', 'Name','Email', 'product', 'price','quantity']
+            fields: ['ID', 'Name','Email', 'product Title', 'Price','Quantity']
         });
+
         const orders = await this.orderService.all(['order_items'])
+
 
         const json = [];
 
@@ -49,16 +53,15 @@ export class OrderController {
             });
 
         });
+        });
 
         const csv = parse.parse(json);
         res.header('Content-Type','text/csv');
         res.attachment('orders.csv');
         return res.send(csv);
-
-
-
-    })
     }
+  
+    
 
     @Get('chart')
     async chart(){
